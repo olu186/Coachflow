@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "CoachFlow",
+    "slug": "coachflow",
+    "version": "1.0.0",
+    "scheme": "coachflow",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.coachflow.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.coachflow.app"
+    },
+    "plugins": ["expo-router"]
+  }
+}
