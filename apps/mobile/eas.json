@@ -18,9 +18,21 @@
       "env": { "npm_config_ignore_scripts": "true" }
     },
     "production": {
-      "ios": {},
-      "android": {},
+      "ios": {
+        "autoIncrement": true
+      },
+      "android": {
+        "autoIncrement": true
+      },
       "env": { "npm_config_ignore_scripts": "true" }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "6760000919",
+        "appleTeamId": "Z584WG9XF2"
+      }
     }
   }
 }
