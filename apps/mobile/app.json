@@ -2,7 +2,7 @@
   "expo": {
     "name": "CoachFlow",
     "slug": "coachflow",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scheme": "coachflow",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
