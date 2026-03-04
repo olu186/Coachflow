@@ -8,12 +8,21 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { supabase } from "../lib/supabase";
 import type { UserRole } from "@coachflow/api-types";
 
 const WEB_APP_URL = process.env.EXPO_PUBLIC_WEB_APP_URL || "http://localhost:3000";
+
+const BRAND_ORANGE = "#E67E22";
+const BACKGROUND = "#0a0a0a";
+const CARD_BG = "#1a1a1a";
+const BORDER = "#333";
+const TEXT_PRIMARY = "#ffffff";
+const TEXT_MUTED = "#9ca3af";
+const QUOTE_GRAY = "#6b7280";
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -82,112 +91,139 @@ export default function SignupScreen() {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>CoachFlow</Text>
-        <Text style={styles.subtitle}>{inviteToken ? "Join your trainer" : "Create account"}</Text>
-        {inviteLoading && (
-          <Text style={styles.inviteHint}>Loading invite…</Text>
-        )}
-        {error && (
-          <View style={styles.errorBox}>
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        )}
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          autoComplete="email"
-          editable={!inviteToken}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password (min 6)"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoComplete="new-password"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
-          autoComplete="name"
-        />
-        {!inviteToken && (
-          <View style={styles.roleRow}>
-            <TouchableOpacity
-              style={[styles.roleBtn, role === "trainer" && styles.roleBtnActive]}
-              onPress={() => setRole("trainer")}
-            >
-              <Text style={[styles.roleText, role === "trainer" && styles.roleTextActive]}>
-                Trainer
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.roleBtn, role === "client" && styles.roleBtnActive]}
-              onPress={() => setRole("client")}
-            >
-              <Text style={[styles.roleText, role === "client" && styles.roleTextActive]}>
-                Client
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
-          onPress={handleSubmit}
-          disabled={loading}
-        >
-          <Text style={styles.buttonText}>{loading ? "Creating…" : "Sign up"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.replace("/login")} style={styles.link}>
-          <Text style={styles.linkText}>Already have an account? Sign in</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+          <Text style={styles.logo}>CoachFlow</Text>
+          <Text style={styles.tagline}>Your clients. Your business. Managed.</Text>
+          <Text style={styles.title}>{inviteToken ? "Join your trainer" : "Create account"}</Text>
+          {inviteLoading && (
+            <Text style={styles.inviteHint}>Loading invite…</Text>
+          )}
+          {error && (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+          <TextInput
+            style={styles.input}
+            placeholder="your@email.com"
+            placeholderTextColor={TEXT_MUTED}
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+            editable={!inviteToken}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password (min 6)"
+            placeholderTextColor={TEXT_MUTED}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoComplete="new-password"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            placeholderTextColor={TEXT_MUTED}
+            value={name}
+            onChangeText={setName}
+            autoComplete="name"
+          />
+          {!inviteToken && (
+            <View style={styles.roleRow}>
+              <TouchableOpacity
+                style={[styles.roleBtn, role === "trainer" && styles.roleBtnActive]}
+                onPress={() => setRole("trainer")}
+              >
+                <Text style={[styles.roleText, role === "trainer" && styles.roleTextActive]}>
+                  Trainer
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.roleBtn, role === "client" && styles.roleBtnActive]}
+                onPress={() => setRole("client")}
+              >
+                <Text style={[styles.roleText, role === "client" && styles.roleTextActive]}>
+                  Client
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>{loading ? "Creating…" : "Sign up"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.replace("/login")} style={styles.link}>
+            <Text style={styles.linkText}>Already have an account? Sign in</Text>
+          </TouchableOpacity>
+          <Text style={styles.quote}>"The secret to getting ahead is getting started."</Text>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: BACKGROUND },
   container: { flex: 1 },
   scroll: { flexGrow: 1, justifyContent: "center", padding: 24, paddingVertical: 48 },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
-  subtitle: { fontSize: 14, color: "#666", textAlign: "center", marginTop: 4, marginBottom: 24 },
-  inviteHint: { fontSize: 13, color: "#666", textAlign: "center", marginBottom: 8 },
-  errorBox: { backgroundColor: "#fef2f2", padding: 12, borderRadius: 8, marginBottom: 16 },
-  errorText: { color: "#b91c1c", fontSize: 14 },
+  logo: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: BRAND_ORANGE,
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  tagline: { fontSize: 14, color: TEXT_MUTED, textAlign: "center", marginBottom: 24 },
+  title: { fontSize: 22, fontWeight: "bold", color: TEXT_PRIMARY, marginBottom: 20 },
+  inviteHint: { fontSize: 13, color: TEXT_MUTED, textAlign: "center", marginBottom: 8 },
+  errorBox: { backgroundColor: "rgba(220,38,38,0.2)", padding: 12, borderRadius: 8, marginBottom: 16 },
+  errorText: { color: "#fca5a5", fontSize: 14 },
   input: {
+    backgroundColor: CARD_BG,
     borderWidth: 1,
-    borderColor: "#d1d5db",
-    borderRadius: 8,
-    padding: 12,
+    borderColor: BORDER,
+    borderRadius: 10,
+    padding: 14,
     fontSize: 16,
+    color: TEXT_PRIMARY,
     marginBottom: 12,
   },
   roleRow: { flexDirection: "row", gap: 12, marginBottom: 16 },
   roleBtn: {
     flex: 1,
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: BORDER,
+    backgroundColor: CARD_BG,
     alignItems: "center",
   },
-  roleBtnActive: { borderColor: "#2563eb", backgroundColor: "#eff6ff" },
-  roleText: { fontSize: 14, color: "#374151" },
-  roleTextActive: { color: "#2563eb", fontWeight: "600" },
-  button: { backgroundColor: "#2563eb", padding: 14, borderRadius: 8, alignItems: "center", marginTop: 8 },
+  roleBtnActive: { borderColor: BRAND_ORANGE, backgroundColor: "rgba(230,126,34,0.15)" },
+  roleText: { fontSize: 14, color: TEXT_MUTED },
+  roleTextActive: { color: BRAND_ORANGE, fontWeight: "600" },
+  button: {
+    backgroundColor: BRAND_ORANGE,
+    padding: 16,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 16,
+  },
   buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: "#fff", fontWeight: "600" },
-  link: { marginTop: 16, alignItems: "center" },
-  linkText: { color: "#2563eb", fontSize: 14 },
+  buttonText: { color: "#000", fontWeight: "700", fontSize: 15 },
+  link: { alignItems: "center" },
+  linkText: { color: BRAND_ORANGE, fontSize: 14 },
+  quote: { fontSize: 13, color: QUOTE_GRAY, fontStyle: "italic", textAlign: "center", marginTop: 32 },
 });
