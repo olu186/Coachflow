@@ -2,6 +2,45 @@
 
 Deploying the web app gives you an HTTPS URL (e.g. `https://coachflow.vercel.app`) for invite links so clients can tap the link in email and open the mobile app.
 
+**Important:** `.env.local` and `.env` are not pushed to GitHub (they’re in `.gitignore` to keep secrets safe). You must add the same variables in Vercel’s dashboard so the deployed app can sign in and call Supabase.
+
+---
+
+## Fix: Sign in / Sign up not working after deploy
+
+If you already deployed and sign in or sign up fails, the app is missing environment variables. Add them in Vercel:
+
+1. Open [vercel.com](https://vercel.com) → your **CoachFlow** project.
+2. Go to **Settings** → **Environment Variables**.
+3. Add these (use the **exact same values** as in your local `apps/web/.env.local`):
+
+   | Name | Value | Required |
+   |------|--------|----------|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL (e.g. `https://xxxx.supabase.co`) | Yes |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon/public key | Yes |
+   | `SUPABASE_SERVICE_ROLE_KEY` | Your Supabase service role key (secret) | Yes (for invites) |
+   | `NEXT_PUBLIC_APP_URL` | Your Vercel app URL (e.g. `https://coachflow-xxx.vercel.app`) | For invite links |
+   | `RESEND_API_KEY` | Your Resend API key | Optional (invite emails) |
+
+   Add each for **Production** (and **Preview** if you want). Save.
+
+4. **Redeploy:** go to **Deployments** → **…** on the latest deployment → **Redeploy**. Wait for the build to finish.
+
+After the redeploy, sign in and sign up should work.
+
+---
+
+## Fix: "Safari cannot open the page because the address is invalid"
+
+This usually happens when the **invite link in the email** is a custom link (`coachflow://invite?token=...`) and the **CoachFlow app is not installed** on the client’s phone. iOS doesn’t know what to do with `coachflow://` and shows that error.
+
+**Fix:** Use **HTTPS** invite links so the client opens a normal webpage first.
+
+1. In Vercel → your project → **Settings** → **Environment Variables**, add or set **`NEXT_PUBLIC_APP_URL`** to your Vercel URL (e.g. `https://coachflow-xxx.vercel.app`). No trailing slash.
+2. **Redeploy** the project (Deployments → … → Redeploy).
+
+After that, new invite emails will contain a link like `https://your-app.vercel.app/invite?token=...`. When the client taps it, Safari opens that page (no “invalid address”). From that page they tap **“Open in CoachFlow app”** to open the app—which only works if the CoachFlow app is **installed** on their device (TestFlight, App Store, or a dev build). You don’t “deploy” the mobile app like a website; the client must install the app on their phone.
+
 ---
 
 ## 1. Create a Vercel account
@@ -61,9 +100,9 @@ Your app lives in `apps/web`. Tell Vercel to build that folder:
 
 ---
 
-## 5. Add environment variables
+## 5. Add environment variables (required)
 
-In the Vercel project, go to **Settings** → **Environment Variables** and add the same variables you use locally. At minimum:
+Your local `.env.local` is not in Git, so Vercel has no env vars until you add them. In the Vercel project, go to **Settings** → **Environment Variables** and add the same variables you use in `apps/web/.env.local`. At minimum:
 
 | Name | Value | Notes |
 |------|--------|--------|

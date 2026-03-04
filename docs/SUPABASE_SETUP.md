@@ -112,11 +112,9 @@ Use your real web app URL. For local dev with a device/emulator, use a tunnel UR
 
 1. Go to **Authentication** → **Providers**.
 2. **Email** should be **Enabled** (default). Leave it on for email/password signup and login.
-3. (Optional) **Authentication** → **URL Configuration**:
+3. **Authentication** → **URL Configuration** (for mobile “Send code” / magic link sign-in):
    - **Site URL:** your production URL (e.g. `https://your-app.vercel.app`) or `http://localhost:3000` for local dev.
-   - **Redirect URLs:** add any extra URLs you use (e.g. `http://localhost:3000/**`, your production URL).
-
-No redirect URL is required for the current CoachFlow web flow; this is only if you add OAuth or email magic links later.
+   - **Redirect URLs:** add **`coachflow://auth/callback`** so the mobile app can complete sign-in when the user taps the magic link in their email. Also add any web URLs you use (e.g. `http://localhost:3000/**`, your production URL).
 
 ---
 
