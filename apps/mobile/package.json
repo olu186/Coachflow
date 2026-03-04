@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "build": "expo export",
     "lint": "expo lint",
-    "clean": "rm -rf .expo node_modules/.cache"
+    "clean": "rm -rf .expo node_modules/.cache",
+    "eas-build-pre-install": "npm config set ignore-scripts true"
   },
   "dependencies": {
     "@coachflow/api-types": "file:../../packages/api-types",
